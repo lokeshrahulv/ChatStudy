@@ -73,8 +73,60 @@ Client-server chat applications are versatile tools that facilitate real-time co
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
+## Program:
+### client:
+```python
+import socket
 
+def client_program():
+    host = socket.gethostname()  # As both code is running on the same PC
+    port = 5000  # Socket server port number
+    client_socket = socket.socket()  # Instantiate
+    client_socket.connect((host, port))  # Connect to the server
+    message = input(" -> ")  # Take input
+    while message.lower().strip() != 'bye':
+        client_socket.send(message.encode())  # Send message
+        data = client_socket.recv(1024).decode()  # Receive response
+        print('Received from server: ' + data)  # Show in terminal
+        message = input(" -> ")  # Again take input
+    client_socket.close()  # Close the connection
+
+if __name__ == '__main__':
+    client_program()
+```
+```python
+import socket
+
+def server_program():
+    # Get the hostname
+    host = socket.gethostname()
+    port = 5000  # Initiate port no above 1024
+    server_socket = socket.socket()  # Get instance
+    # Look closely. The bind() function takes a tuple as an argument
+    server_socket.bind((host, port))  # Bind host address and port together
+    # Configure how many clients the server can listen to simultaneously
+    server_socket.listen(2)
+    conn, address = server_socket.accept()  # Accept new connection
+    print("Connection from: " + str(address))
+    while True:
+        # Receive data stream. It won't accept data packets greater than 1024 bytes
+        data = conn.recv(1024).decode()
+        if not data:
+            # If data is not received, break
+            break
+        print("From connected user: " + str(data))
+        data = input(' -> ')
+        conn.send(data.encode())  # Send data to the client
+    conn.close()  # Close the connection
+
+if __name__ == '__main__':
+    server_program()
+```
+## Output:
+### client:
+![Screenshot 2024-05-14 133526](https://github.com/lokeshrahulv/ChatStudy/assets/118423842/c87c6111-880e-47e2-ae73-e443b2964fee)
+### server:
+![Screenshot 2024-05-14 133516](https://github.com/lokeshrahulv/ChatStudy/assets/118423842/0ac06709-d57f-44d9-8ac8-f34e9acfc466)
 ## Result:
-
 Thus the study on Client Server Chat Applications has been performed
 
